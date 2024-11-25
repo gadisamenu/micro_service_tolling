@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var sendInterval = time.Second
+var sendInterval = time.Second * 5
 
 const wsEndpoint = "ws://127.0.0.1:30000/ws"
 

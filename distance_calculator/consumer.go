@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gadisamenu/tolling/types"
@@ -62,8 +61,8 @@ func (kc *KafkaConsumer) readMessageLoop() {
 			logrus.Errorf("distance calculation error: %s", err)
 			continue
 		}
+		_ = distance
 
-		fmt.Printf("distance: %.2f \n", distance)
 	}
 
 }
