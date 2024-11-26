@@ -18,7 +18,7 @@ func NewLogMiddleware(data DataProducer) *LogMiddleware {
 }
 
 func (lg *LogMiddleware) ProduceData(data types.ObuData) error {
-	go func(start time.Time) {
+	defer func(start time.Time) {
 		logrus.WithFields(logrus.Fields{
 			"obuId": data.ObuId,
 			"lat":   data.Lat,
