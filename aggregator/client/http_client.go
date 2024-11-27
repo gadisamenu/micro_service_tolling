@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,17 +10,18 @@ import (
 	"github.com/gadisamenu/tolling/types"
 )
 
-type Client struct {
+type HTTPClient struct {
 	Endpoint string
 }
 
-func NewClient(endpoint string) *Client {
-	return &Client{
+func NewHTTPClient(endpoint string) Client {
+	return &HTTPClient{
 		Endpoint: endpoint,
 	}
 }
 
-func (c *Client) AggregateInvoice(distance types.Distance) error {
+func (c *HTTPClient) Aggregate(ctx context.Context, distance *types.AggregateRequest) error {
+
 	b, err := json.Marshal(distance)
 	if err != nil {
 		return err

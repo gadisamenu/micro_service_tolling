@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/gadisamenu/tolling/aggregator/client"
 	"github.com/gadisamenu/tolling/types"
 	"google.golang.org/grpc"
 )
@@ -21,14 +24,25 @@ func main() {
 	srvc := NewInvoiceAggregator(store)
 	srvc = NewLogMiddleware(srvc)
 
-	go makeGRPCTransport(*grpcListenAddr, srvc)
-	makeHTTPTransport(*httpListenAddr, srvc)
+	go func() {
+		log.Fatal(makeGRPCTransport(*grpcListenAddr, srvc))
+	}()
+
+	time.Sleep(time.Second * 2)
+
+	client, err := client.NewGRPCClient(*grpcListenAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_ = client
+
+	log.Fatal(makeHTTPTransport(*httpListenAddr, srvc))
 
 }
 
 func makeGRPCTransport(listenAddr string, srvc Aggregator) error {
 	fmt.Println("GRPC listening on port: ", listenAddr)
-	ln, err := net.Listen("TCP", listenAddr)
+	ln, err := net.Listen("tcp", listenAddr)
 	if err != nil {
 		return err
 	}
@@ -41,11 +55,11 @@ func makeGRPCTransport(listenAddr string, srvc Aggregator) error {
 
 	return grpcServer.Serve(ln)
 }
-func makeHTTPTransport(listenAddr string, srvc Aggregator) {
+func makeHTTPTransport(listenAddr string, srvc Aggregator) error {
 	fmt.Println("Http listening on port: ", listenAddr)
 	http.HandleFunc("/aggregate", handleAggregate(srvc))
 	http.HandleFunc("/invoice", handleInvoice(srvc))
-	http.ListenAndServe(listenAddr, nil)
+	return http.ListenAndServe(listenAddr, nil)
 
 }
 func handleInvoice(srvc Aggregator) http.HandlerFunc {

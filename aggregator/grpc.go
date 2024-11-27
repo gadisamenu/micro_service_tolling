@@ -17,7 +17,7 @@ func NewGRPCAggregatorServer(srvc Aggregator) *GRPCAggregatorServer {
 	}
 }
 
-func (gr *GRPCAggregatorServer) DistanceAggregate(ctx context.Context, aggReq *types.AggregateRequest) (*types.None, error) {
+func (gr *GRPCAggregatorServer) Aggregate(ctx context.Context, aggReq *types.AggregateRequest) (*types.None, error) {
 
 	distance := types.Distance{
 		ObuId: int(aggReq.ObuId),
