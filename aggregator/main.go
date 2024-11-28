@@ -64,7 +64,9 @@ func makeHTTPTransport(listenAddr string, srvc Aggregator) error {
 }
 func handleInvoice(srvc Aggregator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.URL.Query())
 		values, ok := r.URL.Query()["obu"]
+		fmt.Println("obu", values, ok)
 		if !ok {
 			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "query obu id is required"})
 			return

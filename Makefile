@@ -1,3 +1,6 @@
+gate:
+	@go build -o bin/gate ./gateway
+	@./bin/gate
 obu:
 	@go build -o bin/obu ./obu
 	@./bin/obu
