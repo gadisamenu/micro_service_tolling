@@ -16,9 +16,10 @@ type apiFunc func(http.ResponseWriter, *http.Request) error
 func main() {
 
 	listenAddr := flag.String("listenAddr", ":6000", "gate way http listening address")
+	aggregateAddr := flag.String("aggregateAddr", "http://127.0.0.1:3000", "listening address for aggregate service")
 	flag.Parse()
 
-	client := client.NewHTTPClient("http://127.0.0.1:3000")
+	client := client.NewHTTPClient(*aggregateAddr)
 	invoiceHandler := NewInvoiceHandler(client)
 
 	http.HandleFunc("/invoice/{obuId}", makeApiFunc(invoiceHandler.handleInvoice))

@@ -12,6 +12,7 @@ import (
 
 	"github.com/gadisamenu/tolling/aggregator/client"
 	"github.com/gadisamenu/tolling/types"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 )
 
@@ -22,6 +23,7 @@ func main() {
 	store := NewMemoryStore()
 
 	srvc := NewInvoiceAggregator(store)
+	srvc = NewMetricsMiddleware(srvc)
 	srvc = NewLogMiddleware(srvc)
 
 	go func() {
@@ -59,6 +61,7 @@ func makeHTTPTransport(listenAddr string, srvc Aggregator) error {
 	fmt.Println("Http listening on port: ", listenAddr)
 	http.HandleFunc("/aggregate", handleAggregate(srvc))
 	http.HandleFunc("/invoice", handleInvoice(srvc))
+	http.Handle("/metrics", promhttp.Handler())
 	return http.ListenAndServe(listenAddr, nil)
 
 }

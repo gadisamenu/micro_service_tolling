@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+# don't forget to change the target ip to your machine ip
+scrape_configs:
+- job_name: aggregator
+  scrape_interval: 5s
+  scrape_timeout: 5s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  static_configs:
+  - targets:
+    - 192.168.0.26:3000
