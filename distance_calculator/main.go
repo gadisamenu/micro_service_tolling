@@ -8,7 +8,7 @@ import (
 
 const (
 	topic    = "obuTopic"
-	endpoint = "http://127.0.0.1:3000"
+	endpoint = "http://127.0.0.1:4000"
 )
 
 func main() {

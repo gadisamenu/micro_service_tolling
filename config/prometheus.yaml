@@ -13,4 +13,4 @@ scrape_configs:
   follow_redirects: true
   static_configs:
   - targets:
-    - 192.168.0.26:3000
+    - 192.168.0.26:4000
